@@ -579,6 +579,7 @@ r_int_real = rarithmetic.build_int("r_int_real", r_int.SIGN, r_int.BITS, True)
 INT_real = lltype.build_number("INT", r_int_real)
 platform.numbertype_to_rclass[INT_real] = r_int_real
 NUMBER_TYPES.append(INT_real)
+INT_realP = lltype.Ptr(lltype.Array(INT_real, hints={'nolength': True}))
 
 # ^^^ this creates at least the following names:
 # --------------------------------------------------------------------
