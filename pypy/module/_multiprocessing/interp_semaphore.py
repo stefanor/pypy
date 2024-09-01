@@ -102,7 +102,7 @@ else:
                             save_err=rffi.RFFI_SAVE_ERRNO)
     _sem_post = external('sem_post', [SEM_T], rffi.INT, releasegil=False,
                          save_err=rffi.RFFI_SAVE_ERRNO)
-    _sem_getvalue = external('sem_getvalue', [SEM_T, rffi.INTP], rffi.INT,
+    _sem_getvalue = external('sem_getvalue', [SEM_T, rffi.INT_realP], rffi.INT,
                              save_err=rffi.RFFI_SAVE_ERRNO)
 
     _gettimeofday = external('gettimeofday', [TIMEVALP, rffi.VOIDP], rffi.INT,
@@ -193,7 +193,7 @@ else:
             raise OSError(rposix.get_saved_errno(), "sem_post failed")
 
     def sem_getvalue(sem):
-        sval_ptr = lltype.malloc(rffi.INTP.TO, 1, flavor='raw')
+        sval_ptr = lltype.malloc(rffi.INT_realP.TO, 1, flavor='raw')
         try:
             res = _sem_getvalue(sem, sval_ptr)
             if res < 0:
