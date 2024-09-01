@@ -1361,7 +1361,8 @@ if _WIN32:
         locals()[name] = pipe_config[name]
 else:
     INT_ARRAY_P = rffi.CArrayPtr(rffi.INT)
-    c_pipe = external('pipe', [INT_ARRAY_P], rffi.INT,
+    INT_real_ARRAY_P = rffi.CArrayPtr(rffi.INT_real)
+    c_pipe = external('pipe', [INT_real_ARRAY_P], rffi.INT,
                       save_err=rffi.RFFI_SAVE_ERRNO)
     class CConfig:
         _compilation_info_ = eci
@@ -1375,7 +1376,7 @@ else:
     HAVE_PIPE2 = pipe_config['HAVE_PIPE2']
     HAVE_DUP3 = pipe_config['HAVE_DUP3']
     if HAVE_PIPE2:
-        c_pipe2 = external('pipe2', [INT_ARRAY_P, rffi.INT], rffi.INT,
+        c_pipe2 = external('pipe2', [INT_real_ARRAY_P, rffi.INT_real], rffi.INT,
                           save_err=rffi.RFFI_SAVE_ERRNO)
 
 @replace_os_function('pipe')
@@ -1401,7 +1402,7 @@ def pipe(flags=0):
                 rwin32.CloseHandle(hwrite)
         raise WindowsError(rwin32.GetLastError_saved(), "CreatePipe failed")
     else:
-        filedes = lltype.malloc(INT_ARRAY_P.TO, 2, flavor='raw')
+        filedes = lltype.malloc(INT_real_ARRAY_P.TO, 2, flavor='raw')
         try:
             if HAVE_PIPE2 and _pipe2_syscall.attempt_syscall():
                 res = c_pipe2(filedes, flags)
@@ -1417,7 +1418,7 @@ def pipe(flags=0):
 def pipe2(flags):
     # Only available if there is really a c_pipe2 function.
     # No fallback to pipe() if we get ENOSYS.
-    filedes = lltype.malloc(INT_ARRAY_P.TO, 2, flavor='raw')
+    filedes = lltype.malloc(INT_real_ARRAY_P.TO, 2, flavor='raw')
     try:
         res = c_pipe2(filedes, flags)
         handle_posix_error('pipe2', res)
