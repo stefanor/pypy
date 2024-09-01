@@ -341,9 +341,9 @@ def UnknownEncodingHandlerData_callback(ll_userdata, name, info):
         result = 0
     else:
         result = 1
-    return rffi.cast(rffi.INT, result)
+    return rffi.cast(rffi.INT_real, result)
 callback_type = lltype.Ptr(lltype.FuncType(
-    [rffi.VOIDP, rffi.CONST_CCHARP, XML_Encoding_Ptr], rffi.INT))
+    [rffi.VOIDP, rffi.CONST_CCHARP, XML_Encoding_Ptr], rffi.INT_real))
 XML_SetUnknownEncodingHandler = expat_external(
     'XML_SetUnknownEncodingHandler',
     [XML_Parser, callback_type, rffi.VOIDP], lltype.Void)
